@@ -1,47 +1,49 @@
-import { useState, useEffect } from 'react'
-import Header from './components/layout/Header'
-import Hero from './components/sections/Hero'
-import About from './components/sections/About'
-import Skills from './components/sections/Skills'
-import Projects from './components/sections/Projects'
-import Contact from './components/sections/Contact'
-import Footer from './components/layout/Footer'
-import ScrollToTop from './components/ui/ScrollToTop'
-import Loader from './components/ui/Loader'
-import './App.css'
-import WorkEx from './components/sections/WorkEx'
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ThemeProvider } from './context/ThemeContext';
+import SmoothScroll from './components/SmoothScroll';
+import Header from './components/layout/Header';
+import Hero from './components/sections/Hero';
+import About from './components/sections/About';
+import Skills from './components/sections/Skills';
+import Projects from './components/sections/Projects';
+import WorkEx from './components/sections/WorkEx';
+import Contact from './components/sections/Contact';
+import Footer from './components/layout/Footer';
+import ScrollToTop from './components/ui/ScrollToTop';
+import Loader from './components/ui/Loader';
+import './App.css';
 
 function App() {
-  const [loading, setLoading] = useState(true)
-  
-  useEffect(() => {
-    // Simulate loading time
-    setTimeout(() => {
-      setLoading(false)
-    }, 1500)
-  }, [])
-
-  if (loading) {
-    return <Loader fullScreen/>
-  }
+  const [loading, setLoading] = useState(true);
 
   return (
-    <>
-      <Header />
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        {/* <Goals /> ← new section */}
-        <Projects />
-        <WorkEx/>
-        {/* <Resume /> */}
-        <Contact />
-      </main>
-      <Footer />
-      <ScrollToTop />
-    </>
-  )
+    <ThemeProvider>
+      <SmoothScroll>
+        <AnimatePresence mode="wait">
+          {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
+        </AnimatePresence>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: loading ? 0 : 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <Header />
+          <main>
+            <Hero />
+            <About />
+            <Skills />
+            <Projects />
+            <WorkEx />
+            <Contact />
+          </main>
+          <Footer />
+          <ScrollToTop />
+        </motion.div>
+      </SmoothScroll>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

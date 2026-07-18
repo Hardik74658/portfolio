@@ -1,167 +1,200 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useScroll, useSpring, useMotionValueEvent } from 'framer-motion';
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../../context/ThemeContext';
+import Magnetic from '../ui/Magnetic';
+import { EASE } from '../ui/Reveal';
+
+const NAV_ITEMS = [
+  { name: 'About', id: 'about' },
+  { name: 'Skills', id: 'skills' },
+  { name: 'Projects', id: 'projects' },
+  { name: 'Experience', id: 'workexperience' },
+  { name: 'Contact', id: 'contact' },
+];
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const { theme, toggleTheme } = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState('');
 
-  // Navigation links with potential dropdowns
-  // Portfolio navigation items
-  const navItems = [
-    { name: "About", link: "/#about" },
-    { name: "Skills", link: "/#skills" },
-    { name: "Projects", link: "/#projects" },
-    { name: "Work Experience", link: "/#workexperience" },
-    { name: "Contact", link: "/#contact" },
-  ];
+  const { scrollY, scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
 
-  // Handle scroll effect for transparent to solid header transition
+  // Hide on scroll down, reveal on scroll up — keeps the canvas clean
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setScrolled(latest > 24);
+    setHidden(latest > prev && latest > 320 && !menuOpen);
+  });
+
+  // Scroll-spy for active nav state
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const sections = NAV_ITEMS
+      .map(({ id }) => document.getElementById(id))
+      .filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px' }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
-  // Close dropdown when clicking outside
+  // Lock body scroll while the mobile menu is open
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (activeDropdown && !event.target.closest('.nav-dropdown-container')) {
-        setActiveDropdown(null);
-      }
-    };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [activeDropdown]);
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   return (
-    <header 
-      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-sm py-2" : "bg-transparent py-5"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Hardik Songara
-              </span>
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-10">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.link}
-                className="text-gray-600 group inline-flex items-center transition-all duration-200 font-medium hover:text-blue-600"
-              >
-                {item.name}
+    <>
+      <motion.header
+        className="fixed top-0 inset-x-0 z-[100]"
+        animate={{ y: hidden ? '-110%' : 0 }}
+        transition={{ duration: 0.5, ease: EASE }}
+      >
+        {/* Scroll progress hairline */}
+        <motion.div
+          className="absolute top-0 left-0 h-[2px] w-full origin-left bg-accent-500"
+          style={{ scaleX: progress }}
+        />
+        <div
+          className={`transition-all duration-500 ease-out-expo ${
+            scrolled ? 'glass shadow-soft py-3' : 'bg-transparent py-5'
+          }`}
+        >
+          <nav className="container-section flex items-center justify-between" aria-label="Primary">
+            <Magnetic strength={0.25}>
+              <a href="#" className="group flex items-center gap-2.5" aria-label="Back to top">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-ink-900 dark:bg-cream-50 font-display text-sm font-bold text-cream-50 dark:text-ink-900 transition-transform duration-300 group-hover:rotate-[-8deg]">
+                  HS
+                </span>
+                <span className="hidden sm:block font-display font-semibold text-ink-900 dark:text-ink-50">
+                  Hardik Songara
+                </span>
               </a>
-            ))}
+            </Magnetic>
+
+            {/* Desktop nav */}
+            <ul className="hidden md:flex items-center gap-1">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 ${
+                      active === item.id
+                        ? 'text-ink-900 dark:text-ink-50'
+                        : 'text-ink-400 dark:text-ink-300 hover:text-ink-900 dark:hover:text-ink-50'
+                    }`}
+                  >
+                    {active === item.id && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        className="absolute inset-0 rounded-full bg-ink-900/[0.06] dark:bg-white/[0.08]"
+                        transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative">{item.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex items-center gap-2">
+              {/* Theme toggle */}
+              <Magnetic strength={0.3}>
+                <button
+                  onClick={toggleTheme}
+                  aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                  className="grid h-10 w-10 place-items-center rounded-full glass cursor-pointer overflow-hidden"
+                >
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={theme}
+                      initial={{ y: 14, opacity: 0, rotate: 40 }}
+                      animate={{ y: 0, opacity: 1, rotate: 0 }}
+                      exit={{ y: -14, opacity: 0, rotate: -40 }}
+                      transition={{ duration: 0.35, ease: EASE }}
+                    >
+                      {theme === 'dark'
+                        ? <SunIcon className="h-5 w-5 text-accent-400" />
+                        : <MoonIcon className="h-5 w-5 text-ink-600" />}
+                    </motion.span>
+                  </AnimatePresence>
+                </button>
+              </Magnetic>
+
+              {/* Mobile burger */}
+              <button
+                className="md:hidden grid h-10 w-10 place-items-center rounded-full glass cursor-pointer"
+                onClick={() => setMenuOpen((o) => !o)}
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
+              >
+                <div className="flex w-5 flex-col gap-[5px]">
+                  <motion.span
+                    className="h-[2px] w-full rounded bg-ink-800 dark:bg-ink-100"
+                    animate={menuOpen ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
+                  />
+                  <motion.span
+                    className="h-[2px] w-full rounded bg-ink-800 dark:bg-ink-100"
+                    animate={menuOpen ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
+                  />
+                </div>
+              </button>
+            </div>
           </nav>
-
-          {/* CTA Button: Get Resume */}
-          <div className="hidden md:flex items-center space-x-4">
-            <a
-              href="https://res.cloudinary.com/dzt4vlcde/image/upload/v1747974219/Hardik_Songara_updated_ts8zh1.pdf"
-              target="_blank"
-              
-              className="whitespace-nowrap px-6 py-3 rounded-full bg-yellow-400 text-gray-900 font-medium hover:bg-yellow-300 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
-            >
-              Get Resume
-            </a>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="flex md:hidden">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 focus:outline-none"
-              aria-expanded="false"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              <span className="sr-only">Open main menu</span>
-              {!mobileMenuOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
-            </button>
-          </div>
         </div>
-      </div>
+      </motion.header>
 
-      {/* Mobile menu - portfolio links and resume */}
-      <div className={`md:hidden transition-all duration-300 ease-in-out ${
-        mobileMenuOpen ? "opacity-100 max-h-96" : "opacity-0 max-h-0 overflow-hidden"
-      }`}>
-        <div className="pt-2 pb-3 space-y-1 bg-white flex flex-col">
-          {navItems.map((item) => (
-            <a
-              key={item.name}
-              href={item.link}
-              className="block text-base font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 px-4 py-2"
-              onClick={() => setMobileMenuOpen(false)}
+      {/* Full-screen mobile menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[99] flex flex-col justify-center bg-cream-50 dark:bg-ink-950 px-8 md:hidden"
+            initial={{ clipPath: 'inset(0 0 100% 0)' }}
+            animate={{ clipPath: 'inset(0 0 0% 0)' }}
+            exit={{ clipPath: 'inset(0 0 100% 0)' }}
+            transition={{ duration: 0.6, ease: [0.87, 0, 0.13, 1] }}
+          >
+            <ul className="space-y-2">
+              {NAV_ITEMS.map((item, i) => (
+                <li key={item.id} className="overflow-hidden">
+                  <motion.a
+                    href={`#${item.id}`}
+                    className="block font-display text-4xl font-semibold text-ink-900 dark:text-ink-50 py-2"
+                    initial={{ y: '110%' }}
+                    animate={{ y: 0 }}
+                    exit={{ y: '110%' }}
+                    transition={{ duration: 0.6, delay: 0.15 + i * 0.06, ease: EASE }}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <span className="mr-4 font-sans text-sm text-accent-600 dark:text-accent-400 tabular-nums align-super">
+                      0{i + 1}
+                    </span>
+                    {item.name}
+                  </motion.a>
+                </li>
+              ))}
+            </ul>
+            <motion.p
+              className="mt-12 text-sm text-ink-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
             >
-              {item.name}
-            </a>
-          ))}
-        </div>
-        <div className="pt-4 pb-3 bg-white">
-          <div className="flex items-center justify-center px-4">
-            <a
-              href="https://res.cloudinary.com/dzt4vlcde/image/upload/v1747974219/Hardik_Songara_updated_ts8zh1.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block px-4 py-2 rounded-full text-base font-medium text-gray-900 bg-yellow-400 hover:bg-yellow-300 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md"
-            >
-              Get Resume
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Add keyframe animations */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes fadeInRight {
-          from {
-            opacity: 0;
-            transform: translateX(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
-    </header>
+              hardik.songara.21549@gmail.com
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
