@@ -10,8 +10,13 @@ import {
   PresentationChartLineIcon,
 } from '@heroicons/react/24/outline';
 
+// Prefix local asset paths with Vite's base URL (needed for GitHub Pages
+// sub-path deploys); external URLs pass through untouched.
+export const withBase = (p) =>
+  p.startsWith('http') ? p : import.meta.env.BASE_URL + p.replace(/^\//, '');
+
 // All project content, links and repos — preserved verbatim from the original site.
-export const PROJECTS = [
+const RAW_PROJECTS = [
   {
     id: 1,
     title: 'Founders Nexus',
@@ -300,5 +305,10 @@ export const PROJECTS = [
     category: 'basic',
   },
 ];
+
+export const PROJECTS = RAW_PROJECTS.map((p) => ({
+  ...p,
+  images: p.images.map(withBase),
+}));
 
 export const PROJECT_TAGS = ['All', 'Resume Projects', 'Vibe Code', 'Web Development', 'Data Analysis', 'Full Stack'];

@@ -251,7 +251,7 @@ export default function Hero() {
               <div className="absolute inset-0 animate-spin-slow rounded-full border border-dashed border-accent-500/40" />
               <div className="absolute inset-5 rounded-full border border-ink-900/[0.06] dark:border-white/[0.08]" />
               <motion.img
-                src="/ProfilePic (2).png"
+                src={`${import.meta.env.BASE_URL}ProfilePic (2).png`}
                 alt="Portrait of Hardik Songara"
                 width={416}
                 height={416}
