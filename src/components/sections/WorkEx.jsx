@@ -1,10 +1,45 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { CodeBracketIcon, ChartBarIcon, ArrowUpRightIcon } from '@heroicons/react/24/outline';
+import {
+  CodeBracketIcon, ChartBarIcon, ArrowUpRightIcon, CloudIcon, SparklesIcon,
+} from '@heroicons/react/24/outline';
 import SectionHeading from '../ui/SectionHeading';
 import { EASE } from '../ui/Reveal';
 
 const EXPERIENCES = [
+  {
+    id: 'tcs',
+    role: 'Assistant System Engineer Trainee',
+    subtitle: 'Cloud Technical Consultant (SAP) · Team Lead',
+    company: 'Tata Consultancy Services (TCS)',
+    location: 'India',
+    duration: 'Present',
+    description: [
+      'Working as a Cloud Technical Consultant on SAP, supporting SAP ERP systems and tools including DED, CLD and SPC.',
+      'Hands-on with SAP solutions: SAP S/4HANA, SAP Web Dispatcher and SAP Cloud Connector agents, including their installation and configuration.',
+      'Installing, configuring and administering Linux servers that host SAP workloads.',
+      'Became Team Lead within 3 months of joining: leading the team\'s day-to-day work and building real management and leadership skills.',
+    ],
+    tech: ['SAP S/4HANA', 'SAP ERP', 'DED', 'CLD', 'SPC', 'SAP Web Dispatcher', 'SAP Cloud Connector', 'Linux', 'Team Leadership'],
+    icon: CloudIcon,
+  },
+  {
+    id: 'medialabz',
+    role: 'Founder',
+    company: 'TheMediaLabz',
+    location: 'Ahmedabad, Gujarat',
+    duration: '2026 – Present',
+    url: 'https://themedialabz.vercel.app/',
+    urlLabel: 'Visit TheMediaLabz',
+    description: [
+      'Founded and run a branding, content and custom-web studio: logos, Instagram management, posters, reels, custom websites and AI agents.',
+      'Built a table-ordering system for Chai Kaapi Ahmedabad that takes UPI payments with zero gateway fees, plus their posters, creatives and reels.',
+      'Launched TheWedLabs, a wedding invitation website product with 50+ WedSites delivered.',
+      'Designed and built client sites such as an animated video-editor portfolio for Karan Suthar.',
+    ],
+    tech: ['React', 'React Three Fiber', 'Firebase', 'Tailwind CSS', 'Motion', 'Branding', 'Video Editing'],
+    icon: SparklesIcon,
+  },
   {
     id: 0,
     role: 'Full Stack Developer Intern',
@@ -69,6 +104,9 @@ function ExperienceCard({ exp, index }) {
             </span>
             <div>
               <h3 className="font-display text-xl md:text-2xl font-semibold">{exp.role}</h3>
+              {exp.subtitle && (
+                <p className="mt-1 font-medium text-accent-700 dark:text-accent-400">{exp.subtitle}</p>
+              )}
               <p className="mt-1 text-ink-500 dark:text-ink-300">
                 {exp.company} · {exp.location}
               </p>
@@ -79,7 +117,7 @@ function ExperienceCard({ exp, index }) {
                   rel="noopener noreferrer"
                   className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-accent-700 dark:text-accent-400 hover:text-accent-600 cursor-pointer"
                 >
-                  View Project <ArrowUpRightIcon className="h-3.5 w-3.5" />
+                  {exp.urlLabel || 'View Project'} <ArrowUpRightIcon className="h-3.5 w-3.5" />
                 </a>
               )}
             </div>
@@ -134,7 +172,7 @@ export default function WorkEx() {
         <SectionHeading
           eyebrow="Experience"
           title="Where I've made an impact"
-          lede="Internships where I shipped real products and real analysis."
+          lede="From SAP cloud consulting and team leadership at TCS to founding my own studio."
         />
 
         <div ref={timelineRef} className="relative mx-auto max-w-4xl">
@@ -163,7 +201,7 @@ export default function WorkEx() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf opacity-60" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-leaf" />
             </span>
-            <p className="font-medium text-ink-700 dark:text-ink-100">Ready for new opportunities</p>
+            <p className="font-medium text-ink-700 dark:text-ink-100">Currently at TCS · Building TheMediaLabz</p>
           </div>
         </motion.div>
       </div>

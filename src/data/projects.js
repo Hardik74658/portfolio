@@ -15,8 +15,92 @@ import {
 export const withBase = (p) =>
   p.startsWith('http') ? p : import.meta.env.BASE_URL + p.replace(/^\//, '');
 
-// All project content, links and repos — preserved verbatim from the original site.
+// Newest work first: TheMediaLabz (founder) and its client / product builds,
+// followed by the original projects, preserved verbatim.
 const RAW_PROJECTS = [
+  {
+    id: 14,
+    title: 'TheMediaLabz',
+    description: 'My own branding, content and custom-web studio: a live agency site with a WebGL hero, glass UI and real client work.',
+    longDescription: 'TheMediaLabz is the creative and tech studio I founded and run hands-on. It brings brand identity, logo design, Instagram management, posters, reels and video editing, custom websites and custom AI agents together under one roof. I designed and built the agency site myself: a React Three Fiber hero with a chrome torus and distorted pop-colour blobs that follow the pointer, glassmorphic cards, Lenis smooth scroll, Motion reveals and a live showcase of the reels and posters we shipped for clients.',
+    tags: ['Founder', 'Client Work', 'Web Development'],
+    images: [
+      '/TheMediaLabz/hero.png',
+      'https://res.cloudinary.com/dzt4vlcde/image/upload/f_auto,q_auto/v1784439873/21ca0887-3c72-4000-b3a6-1b8ff67d675f_idxwsg.png',
+    ],
+    features: [
+      'Interactive 3D hero built with React Three Fiber (chrome torus + distort blobs)',
+      'Services: branding, Instagram, posters, reels, custom websites and AI agents',
+      'Client showcase with embedded Instagram reels and a poster gallery',
+      'Fast, lazy-loaded WebGL with smooth scroll and reduced-motion support',
+    ],
+    technologies: ['React', 'TypeScript', 'React Three Fiber', 'Three.js', 'Tailwind CSS', 'Motion', 'Lenis', 'Vercel'],
+    demo: 'https://themedialabz.vercel.app/',
+    icon: CubeIcon,
+    category: 'client',
+  },
+  {
+    id: 15,
+    title: 'Chai Kaapi Ahmedabad',
+    description: 'A video-first digital menu and table-ordering system for a real cafe that takes payments without gateway fees.',
+    longDescription: 'Built through TheMediaLabz for Chai Kaapi, a cafe in Ahmedabad. Customers scan a table QR code, browse a video-first menu, build a cart and pay through a direct UPI link with the amount and order code locked in, so the cafe pays zero payment-gateway fees. Staff verify and manage every order live on an Order Desk dashboard backed by Firebase. We also ran the cafe\'s content: branding posters, deal-of-the-day Instagram creatives and promo reels shot and edited in-house.',
+    tags: ['Client Work', 'Full Stack', 'Web Development'],
+    images: [
+      '/ChaiKaapi/hero.png',
+      'https://res.cloudinary.com/dzt4vlcde/image/upload/f_auto,q_auto/v1784440000/chai-kaapi-ahmedabad_xlfqju.jpg',
+    ],
+    features: [
+      'QR-per-table ordering with a cart and live order tracking',
+      'Direct UPI payments with locked amount: no gateway fees on any order',
+      'Realtime Order Desk for staff (accept, reject, confirm, serve) on Firebase',
+      'Video-first menu, dark mode, plus posters, IG creatives and reels for the brand',
+    ],
+    technologies: ['JavaScript', 'HTML/CSS', 'Firebase', 'Firestore', 'UPI', 'Motion', 'Cloudinary', 'Vercel'],
+    demo: 'https://chai-kaapi-lake.vercel.app/',
+    icon: CommandLineIcon,
+    category: 'client',
+  },
+  {
+    id: 16,
+    title: 'TheWedLabs',
+    description: 'A product for premium online wedding invitation websites: templates from ₹999 and fully custom WedSites.',
+    longDescription: 'TheWedLabs is a TheMediaLabz product that turns our template craft into a business. Couples pick a mobile-first wedding invitation website (Royal Indian, Modern Fun, Blossom Romance and more) or order a fully custom one, share their story, photos and event details, and get a personal link to send to guests. Sites include a love story timeline, event schedule, photo gallery, countdowns and RSVP through WhatsApp or Google Sheets. 50+ WedSites have been delivered so far.',
+    tags: ['Product', 'Client Work', 'Web Development'],
+    images: [
+      '/TheWedLabs/hero.png',
+      '/TheWedLabs/image.png',
+    ],
+    features: [
+      'Template WedSites from ₹999, custom designs from ₹2,499',
+      'Love story timeline, event schedule, photo gallery and countdown',
+      'RSVP via WhatsApp or Google Sheets, custom domain support',
+      '50+ WedSites delivered, ready in 24 to 48 hours',
+    ],
+    technologies: ['React', 'JavaScript', 'Tailwind CSS', 'Animations', 'Google Sheets'],
+    demo: 'https://thewedlabs.app',
+    icon: PresentationChartLineIcon,
+    category: 'client',
+  },
+  {
+    id: 17,
+    title: 'Karan Suthar: Video Editor Portfolio',
+    description: 'A playful, heavily animated portfolio for a video editor, styled like an editing timeline.',
+    longDescription: 'A portfolio site for Karan Suthar, a video editor, motion designer and visual storyteller from Gujarat. The whole experience borrows from an editing suite: a "rendering" preloader, a retro TV hero, a live timeline with V1 to V3 and A1 to A3 tracks that plays out J-cuts, L-cuts and razor edits, and hover-to-preview reels. Work is organised into short-form, long-form, motion graphics and AI content, followed by a client wall (EMPOWRD AI, Zed Talks, MatchKut Studio).',
+    tags: ['Client Work', 'Animation', 'Web Development'],
+    images: [
+      '/KaranPortfolio/hero.png',
+    ],
+    features: [
+      'Editing-timeline animation with tracks, J-cuts, L-cuts and razor edits',
+      'Hover-to-preview, click-to-watch video grid',
+      'Short-form, long-form, motion graphics and AI content sections',
+      'Rendering preloader, marquees and hand-drawn doodle accents',
+    ],
+    technologies: ['React', 'Vite', 'CSS Animations', 'JavaScript', 'Netlify'],
+    demo: 'https://karansuthar-portfolio.netlify.app/',
+    icon: CubeIcon,
+    category: 'client',
+  },
   {
     id: 1,
     title: 'Founders Nexus',
@@ -311,4 +395,4 @@ export const PROJECTS = RAW_PROJECTS.map((p) => ({
   images: p.images.map(withBase),
 }));
 
-export const PROJECT_TAGS = ['All', 'Resume Projects', 'Vibe Code', 'Web Development', 'Data Analysis', 'Full Stack'];
+export const PROJECT_TAGS = ['All', 'Client Work', 'Resume Projects', 'Vibe Code', 'Web Development', 'Data Analysis', 'Full Stack'];

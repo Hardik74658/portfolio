@@ -50,7 +50,8 @@ const SOCIAL_LINKS = [
   },
 ];
 
-const ROLES = ['Software Engineer', 'Full-Stack Developer', 'Data Analyst', 'UI Craftsman'];
+const ROLES = ['SAP Cloud Consultant', 'Team Lead', 'Software Engineer', 'Full-Stack Developer', 'Studio Founder'];
+const LONGEST_ROLE = ROLES.reduce((a, b) => (b.length > a.length ? b : a));
 const FIRST = 'Hardik';
 const LAST = 'Songara';
 
@@ -79,7 +80,11 @@ function RotatingRole() {
     return () => clearInterval(t);
   }, []);
   return (
-    <span className="relative inline-block h-[1.5em] overflow-hidden align-bottom min-w-[13ch]">
+    <span className="relative inline-block h-[1.5em] overflow-hidden align-bottom">
+      {/* Invisible sizer: reserves the width of the longest role so none get clipped */}
+      <span aria-hidden="true" className="invisible whitespace-nowrap font-display font-medium">
+        {LONGEST_ROLE}
+      </span>
       <AnimatePresence mode="wait">
         <motion.span
           key={index}
@@ -163,7 +168,7 @@ export default function Hero() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-leaf" />
               </span>
-              Open to opportunities · Ahmedabad, IN
+              Cloud Technical Consultant @ TCS · Founder, TheMediaLabz
             </motion.span>
 
             <h1 className="text-display mt-6" aria-label={`${FIRST} ${LAST}`}>

@@ -2,15 +2,17 @@ import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 import {
   CodeBracketIcon, ChartBarIcon, CubeIcon, ServerStackIcon,
-  CpuChipIcon, AcademicCapIcon,
+  CpuChipIcon, AcademicCapIcon, CloudIcon, UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import {
   FaPython, FaBootstrap, FaDatabase, FaChartBar, FaFileExcel,
   FaUserFriends, FaChartLine, FaCode, FaFlask,
+  FaCloud, FaServer, FaNetworkWired, FaUsers, FaUserTie,
 } from 'react-icons/fa';
 import {
   SiNumpy, SiPandas, SiScikitlearn, SiStreamlit, SiReact,
   SiMongodb, SiMysql, SiFastapi, SiJira, SiGoogleanalytics,
+  SiSap, SiLinux, SiThreedotjs, SiFirebase,
 } from 'react-icons/si';
 import FaJava from '../../assets/icons/skills/java.svg';
 import FaHtml5 from '../../assets/icons/skills/html5.svg';
@@ -44,20 +46,33 @@ const skillIcons = {
   'A/B Testing': SiGoogleanalytics,
   'SQL for Analytics': FaDatabase,
   'Data Storytelling': FaChartBar,
+  'SAP S/4HANA': SiSap,
+  'SAP ERP (DED, CLD, SPC)': SiSap,
+  'SAP Web Dispatcher': FaNetworkWired,
+  'SAP Cloud Connector': FaCloud,
+  'SAP Installations': FaServer,
+  'Linux Server': SiLinux,
+  'Team Leadership': FaUsers,
+  'People Management': FaUserTie,
+  'Stakeholder Communication': FaUserFriends,
+  'Three.js / R3F': SiThreedotjs,
+  'Firebase': SiFirebase,
 };
 
 const getSkillIcon = (skill) => skillIcons[skill] || FaCode;
 
 const CATEGORIES = [
+  { title: 'SAP & Cloud', icon: CloudIcon, items: ['SAP S/4HANA', 'SAP ERP (DED, CLD, SPC)', 'SAP Web Dispatcher', 'SAP Cloud Connector', 'SAP Installations', 'Linux Server'], span: 'md:col-span-2' },
+  { title: 'Leadership', icon: UserGroupIcon, items: ['Team Leadership', 'People Management', 'Stakeholder Communication'] },
   { title: 'Programming Languages', icon: CodeBracketIcon, items: ['Java', 'Python', 'HTML5', 'CSS3', 'JavaScript'], span: 'md:col-span-2' },
-  { title: 'Frameworks', icon: CpuChipIcon, items: ['Bootstrap', 'Flask', 'React', 'FastAPI'] },
+  { title: 'Frameworks', icon: CpuChipIcon, items: ['Bootstrap', 'Flask', 'React', 'FastAPI', 'Three.js / R3F', 'Firebase'] },
   { title: 'Data Visualization', icon: ChartBarIcon, items: ['Power BI', 'Excel'] },
   { title: 'ML Libraries', icon: CubeIcon, items: ['NumPy', 'pandas', 'scikit-learn', 'Streamlit'] },
   { title: 'Databases', icon: ServerStackIcon, items: ['MongoDB', 'MySQL'] },
   { title: 'Product & Analytical Skills', icon: AcademicCapIcon, items: ['Strategy & Roadmapping', 'Agile & Scrum', 'User Research & UX Thinking', 'A/B Testing', 'SQL for Analytics', 'Data Storytelling'], span: 'md:col-span-2' },
 ];
 
-const MARQUEE_SKILLS = ['React', 'Python', 'FastAPI', 'MongoDB', 'Power BI', 'JavaScript', 'pandas', 'MySQL', 'Flask', 'NumPy', 'Excel', 'Bootstrap'];
+const MARQUEE_SKILLS = ['SAP S/4HANA', 'SAP Cloud Connector', 'Linux Server', 'Team Leadership', 'React','Python', 'FastAPI', 'MongoDB', 'Power BI', 'JavaScript', 'pandas', 'MySQL', 'Flask', 'NumPy', 'Excel', 'Bootstrap'];
 
 /** Card with pointer-tracked 3D tilt (pointer devices only). */
 function TiltCard({ children, className = '' }) {
@@ -121,7 +136,7 @@ export default function Skills() {
         <SectionHeading
           eyebrow="Toolkit"
           title="Skills that turn ideas into products"
-          lede="Full-stack engineering meets data — one coherent toolkit."
+          lede="SAP cloud, full-stack engineering, data and leadership: one coherent toolkit."
         />
       </div>
 

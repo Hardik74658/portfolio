@@ -7,15 +7,19 @@ import Reveal, { EASE, staggerParent, staggerChild } from '../ui/Reveal';
 const FAQS = [
   {
     question: 'Who am I as a developer?',
-    answer: "I'm a passionate fresher focused on building scalable, user-centric web solutions with a keen eye for design and functionality. My approach combines technical expertise with creative problem-solving.",
+    answer: "I'm an engineer who works across enterprise cloud and the modern web. By day I'm an SAP Cloud Technical Consultant at TCS; on the side I run TheMediaLabz, building scalable, user-centric web products with a keen eye for design and functionality.",
   },
   {
     question: 'What technical skills do I bring?',
-    answer: 'I have hands-on experience with React, FastAPI, MongoDB, Python, Excel, and Power BI. My technical toolkit enables me to develop full-stack solutions with modern frameworks and data-driven approaches.',
+    answer: 'On the enterprise side: SAP ERP tools (DED, CLD, SPC), SAP S/4HANA, SAP Web Dispatcher, SAP Cloud Connector agents, their installations, and Linux server administration. On the web side: React, Three.js / React Three Fiber, FastAPI, Firebase, MongoDB and Python, plus Excel and Power BI for data.',
   },
   {
     question: "What's my professional experience?",
-    answer: "I've worked as a Full Stack Developer Intern at Grownited Pvt. Ltd. (Jan–Apr 2025) where I built Founders Nexus — a platform connecting startup founders with mentors and investors — using FastAPI and modern frontend frameworks. I also worked as a Data Analyst Intern (June–July 2024) where I extracted data from PDFs, analyzed sales trends with Power BI, and employed statistical analysis using Python libraries.",
+    answer: "I'm currently at Tata Consultancy Services (TCS) as an Assistant System Engineer Trainee working as a Cloud Technical Consultant in SAP, and I became Team Lead within 3 months of joining. I also founded TheMediaLabz, a branding, content and web studio whose work includes Chai Kaapi Ahmedabad's ordering system and TheWedLabs. Before that, I worked as a Full Stack Developer Intern at Grownited Pvt. Ltd. (Jan–Apr 2025) where I built Founders Nexus — a platform connecting startup founders with mentors and investors — using FastAPI and modern frontend frameworks. I also worked as a Data Analyst Intern (June–July 2024) where I extracted data from PDFs, analyzed sales trends with Power BI, and employed statistical analysis using Python libraries.",
+  },
+  {
+    question: 'How do I lead?',
+    answer: "Becoming Team Lead at TCS within my first 3 months taught me that leadership is mostly clarity and trust: breaking work down, unblocking people early and owning the outcome. Running TheMediaLabz adds the other half: managing clients, deadlines and delivery end to end.",
   },
   {
     question: 'How do I approach new challenges?',
@@ -32,9 +36,9 @@ const FAQS = [
 ];
 
 const STATS = [
-  { value: '13+', label: 'Projects shipped' },
-  { value: '2', label: 'Internships' },
-  { value: '10+', label: 'Technologies' },
+  { value: '17+', label: 'Projects shipped' },
+  { value: '3 mo', label: 'To team lead' },
+  { value: '20+', label: 'Technologies' },
 ];
 
 function FaqItem({ faq, index, open, onToggle }) {

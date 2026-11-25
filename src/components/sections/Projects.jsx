@@ -124,14 +124,16 @@ function ProjectCard({ project, index, onOpen }) {
               <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
             </button>
           </Magnetic>
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 dark:text-ink-300 transition-colors hover:text-accent-700 dark:hover:text-accent-400 cursor-pointer"
-          >
-            <GitHubGlyph className="h-4 w-4" /> GitHub
-          </a>
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-500 dark:text-ink-300 transition-colors hover:text-accent-700 dark:hover:text-accent-400 cursor-pointer"
+            >
+              <GitHubGlyph className="h-4 w-4" /> GitHub
+            </a>
+          )}
           {project.demo && project.demo !== '#' && (
             <a
               href={project.demo}
@@ -301,14 +303,16 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }) {
             </button>
           </div>
           <div className="flex gap-3">
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-ink-900 dark:bg-cream-50 px-5 py-2.5 text-sm font-medium text-cream-50 dark:text-ink-900 transition-transform hover:scale-[1.03] cursor-pointer"
-            >
-              <GitHubGlyph /> GitHub
-            </a>
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-ink-900 dark:bg-cream-50 px-5 py-2.5 text-sm font-medium text-cream-50 dark:text-ink-900 transition-transform hover:scale-[1.03] cursor-pointer"
+              >
+                <GitHubGlyph /> GitHub
+              </a>
+            )}
             {project.demo && project.demo !== '#' && (
               <a
                 href={project.demo}
