@@ -1,23 +1,11 @@
-import {
-  CodeBracketIcon,
-  DocumentTextIcon,
-  ChartBarIcon,
-  CpuChipIcon,
-  ShieldCheckIcon,
-  CommandLineIcon,
-  CubeIcon,
-  ServerIcon,
-  PresentationChartLineIcon,
-} from '@heroicons/react/24/outline';
-
 // Prefix local asset paths with Vite's base URL (needed for GitHub Pages
 // sub-path deploys); external URLs pass through untouched.
 export const withBase = (p) =>
-  p.startsWith('http') ? p : import.meta.env.BASE_URL + p.replace(/^\//, '');
+  !p || /^(https?:|data:|blob:)/.test(p) ? p : import.meta.env.BASE_URL + p.replace(/^\//, '');
 
 // Newest work first: TheMediaLabz (founder) and its client / product builds,
 // followed by the original projects, preserved verbatim.
-const RAW_PROJECTS = [
+export const DEFAULT_PROJECTS = [
   {
     id: 14,
     title: 'TheMediaLabz',
@@ -36,7 +24,7 @@ const RAW_PROJECTS = [
     ],
     technologies: ['React', 'TypeScript', 'React Three Fiber', 'Three.js', 'Tailwind CSS', 'Motion', 'Lenis', 'Vercel'],
     demo: 'https://themedialabz.vercel.app/',
-    icon: CubeIcon,
+    icon: 'CubeIcon',
     category: 'client',
   },
   {
@@ -57,7 +45,7 @@ const RAW_PROJECTS = [
     ],
     technologies: ['JavaScript', 'HTML/CSS', 'Firebase', 'Firestore', 'UPI', 'Motion', 'Cloudinary', 'Vercel'],
     demo: 'https://chai-kaapi-lake.vercel.app/',
-    icon: CommandLineIcon,
+    icon: 'CommandLineIcon',
     category: 'client',
   },
   {
@@ -78,7 +66,7 @@ const RAW_PROJECTS = [
     ],
     technologies: ['React', 'JavaScript', 'Tailwind CSS', 'Animations', 'Google Sheets'],
     demo: 'https://thewedlabs.app',
-    icon: PresentationChartLineIcon,
+    icon: 'PresentationChartLineIcon',
     category: 'client',
   },
   {
@@ -98,7 +86,7 @@ const RAW_PROJECTS = [
     ],
     technologies: ['React', 'Vite', 'CSS Animations', 'JavaScript', 'Netlify'],
     demo: 'https://karansuthar-portfolio.netlify.app/',
-    icon: CubeIcon,
+    icon: 'CubeIcon',
     category: 'client',
   },
   {
@@ -121,7 +109,7 @@ const RAW_PROJECTS = [
     github: 'https://github.com/Hardik74658/foundersNexusFrontend',
     demo: 'https://foundersnexus.netlify.app/',
     backendRepo: 'https://github.com/Hardik74658/foundersNexusBackend',
-    icon: CpuChipIcon,
+    icon: 'CpuChipIcon',
     category: 'resume',
   },
   {
@@ -143,7 +131,7 @@ const RAW_PROJECTS = [
     technologies: ['Python', 'Pandas', 'NumPy', 'Power BI', 'SQL', 'React/NextJS', 'JIRA'],
     github: 'https://github.com/Hardik74658/Internship_Project_Herbalife_Neutrition_Sales_Analysis_2022-2024',
     demo: '#',
-    icon: ChartBarIcon,
+    icon: 'ChartBarIcon',
     category: 'resume',
   },
   {
@@ -165,7 +153,7 @@ const RAW_PROJECTS = [
     technologies: ['NextJS', 'HTML', 'CSS', 'JavaScript', 'RESTful API'],
     github: 'https://github.com/Hardik74658/my-app',
     demo: 'https://neighbourly-connect.vercel.app',
-    icon: ServerIcon,
+    icon: 'ServerIcon',
     category: 'resume',
   },
   {
@@ -187,7 +175,7 @@ const RAW_PROJECTS = [
     technologies: ['ReactJS', 'React Context', 'JavaScript', 'HTML/CSS'],
     github: 'https://github.com/Hardik74658/E_Waste_Managemet/tree/main',
     demo: '#',
-    icon: PresentationChartLineIcon,
+    icon: 'PresentationChartLineIcon',
     category: 'resume',
   },
   {
@@ -209,7 +197,7 @@ const RAW_PROJECTS = [
     technologies: ['React', 'JavaScript', 'CSS', 'HTML'],
     github: 'https://github.com/Hardik74658/ZerodhaClone',
     demo: '#',
-    icon: ChartBarIcon,
+    icon: 'ChartBarIcon',
     category: 'resume',
   },
   {
@@ -231,7 +219,7 @@ const RAW_PROJECTS = [
     technologies: ['React', 'CSS', 'JavaScript', 'Lovable', 'Copilot'],
     github: 'https://github.com/Hardik74658/irctc-clone',
     demo: 'https://irctc-modified.netlify.app',
-    icon: CommandLineIcon,
+    icon: 'CommandLineIcon',
     category: 'vibe',
   },
   {
@@ -253,7 +241,7 @@ const RAW_PROJECTS = [
     technologies: ['HTML', 'CSS', 'JavaScript', 'Lovable', 'ChatGPT'],
     github: 'https://github.com/Hardik74658/PortfolioGallery',
     demo: 'https://portfolio-projects-gallery.netlify.app',
-    icon: CubeIcon,
+    icon: 'CubeIcon',
     category: 'vibe',
   },
   {
@@ -275,7 +263,7 @@ const RAW_PROJECTS = [
     technologies: ['React', 'CSS', 'JavaScript', 'Vibe Code'],
     github: 'https://github.com/Hardik74658/passport-seva-clone',
     demo: 'https://passport-seva-clone.netlify.app/',
-    icon: DocumentTextIcon,
+    icon: 'DocumentTextIcon',
     category: 'vibe',
   },
   {
@@ -297,7 +285,7 @@ const RAW_PROJECTS = [
     technologies: ['HTML', 'CSS', 'JavaScript', 'GSAP', 'ScrollTrigger'],
     github: 'https://github.com/Hardik74658/quantum-vista-glow-main',
     demo: 'https://quantamvista.netlify.app/',
-    icon: CpuChipIcon,
+    icon: 'CpuChipIcon',
     category: 'vibe',
   },
   {
@@ -319,7 +307,7 @@ const RAW_PROJECTS = [
     technologies: ['React', 'CSS', 'JavaScript', 'Vibe Code'],
     github: 'https://github.com/Hardik74658/pixel-retro-collectible-haven-vibe-coded',
     demo: 'https://pixel-pro-vibe-coded.netlify.app/',
-    icon: ShieldCheckIcon,
+    icon: 'ShieldCheckIcon',
     category: 'vibe',
   },
   {
@@ -341,7 +329,7 @@ const RAW_PROJECTS = [
     technologies: ['React', 'CSS', 'JavaScript', 'Vibe Code'],
     github: 'https://github.com/Hardik74658/ConnectPro---Vibe-Coded--',
     demo: 'https://connectprovibecoded.netlify.app/',
-    icon: ServerIcon,
+    icon: 'ServerIcon',
     category: 'vibe',
   },
   {
@@ -363,7 +351,7 @@ const RAW_PROJECTS = [
     technologies: ['HTML', 'CSS', 'JavaScript', 'Vibe Code'],
     github: 'https://github.com/Hardik74658/UpVote-Vibe-Coded-UI',
     demo: 'https://jade-rolypoly-3ecaf6.netlify.app/',
-    icon: CommandLineIcon,
+    icon: 'CommandLineIcon',
     category: 'vibe',
   },
   {
@@ -385,14 +373,9 @@ const RAW_PROJECTS = [
     technologies: ['HTML', 'CSS'],
     github: 'https://github.com/Hardik74658/skillshare',
     demo: '#',
-    icon: DocumentTextIcon,
+    icon: 'DocumentTextIcon',
     category: 'basic',
   },
 ];
 
-export const PROJECTS = RAW_PROJECTS.map((p) => ({
-  ...p,
-  images: p.images.map(withBase),
-}));
-
-export const PROJECT_TAGS = ['All', 'Client Work', 'Resume Projects', 'Vibe Code', 'Web Development', 'Data Analysis', 'Full Stack'];
+export const DEFAULT_PROJECT_TAGS = ['All', 'Client Work', 'Resume Projects', 'Vibe Code', 'Web Development', 'Data Analysis', 'Full Stack'];

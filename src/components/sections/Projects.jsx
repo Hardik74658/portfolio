@@ -9,7 +9,8 @@ import {
 import SectionHeading from '../ui/SectionHeading';
 import Magnetic from '../ui/Magnetic';
 import { EASE } from '../ui/Reveal';
-import { PROJECTS, PROJECT_TAGS } from '../../data/projects';
+import { useContent } from '../../context/ContentContext';
+import { getIcon } from '../../data/icons';
 
 const GitHubGlyph = ({ className = 'w-4 h-4' }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -63,7 +64,7 @@ function ProjectCard({ project, index, onOpen }) {
         >
           <div className="aspect-[16/10] overflow-hidden">
             <motion.img
-              src={project.images[0]}
+              src={project.images?.[0]}
               alt={project.title}
               loading="lazy"
               className="h-full w-full object-cover object-top"
@@ -94,7 +95,7 @@ function ProjectCard({ project, index, onOpen }) {
           </span>
           <span className="h-px w-10 bg-accent-500/50" />
           <span className="text-xs font-medium uppercase tracking-[0.18em] text-ink-400 dark:text-ink-300">
-            {project.tags[0]}
+            {project.tags?.[0]}
           </span>
         </div>
 
@@ -104,7 +105,7 @@ function ProjectCard({ project, index, onOpen }) {
         <p className="mt-3 max-w-xl text-ink-500 dark:text-ink-300">{project.description}</p>
 
         <ul className="mt-5 flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
+          {(project.tags || []).map((tag) => (
             <li
               key={tag}
               className="rounded-full border border-ink-900/[0.08] dark:border-white/[0.1] px-3 py-1 text-xs text-ink-500 dark:text-ink-300"
@@ -194,7 +195,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }) {
         <div className="flex items-center justify-between border-b border-ink-900/[0.08] dark:border-white/[0.08] p-5 sm:p-6">
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-2xl bg-accent-500/10 text-accent-600 dark:text-accent-400">
-              {React.createElement(project.icon, { className: 'h-5 w-5' })}
+              {React.createElement(getIcon(project.icon), { className: 'h-5 w-5' })}
             </span>
             <h2 className="font-display text-xl sm:text-2xl font-semibold">{project.title}</h2>
           </div>
@@ -238,7 +239,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }) {
               </div>
 
               <div className="mb-6 flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
+                {(project.tags || []).map((tag) => (
                   <span key={tag} className="rounded-full bg-accent-500/10 px-3 py-1 text-sm text-accent-700 dark:text-accent-400">
                     {tag}
                   </span>
@@ -250,7 +251,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }) {
 
               <h3 className="mb-3 font-display text-lg font-semibold">Key Features</h3>
               <ul className="mb-6 space-y-2">
-                {project.features.map((feature, idx) => (
+                {(project.features || []).filter(Boolean).map((feature, idx) => (
                   <motion.li
                     key={idx}
                     className="flex items-start gap-2.5 text-ink-600 dark:text-ink-300"
@@ -266,7 +267,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }) {
 
               <h3 className="mb-3 font-display text-lg font-semibold">Technologies</h3>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech, idx) => (
+                {(project.technologies || []).map((tech, idx) => (
                   <motion.span
                     key={tech}
                     className="rounded-lg border border-ink-900/[0.08] dark:border-white/[0.1] px-3 py-1.5 text-sm text-ink-600 dark:text-ink-200"
@@ -331,6 +332,11 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }) {
 }
 
 export default function Projects() {
+  const { sections, projects: projectsContent } = useContent();
+  const sec = sections.projects;
+  const PROJECTS = projectsContent.items.filter((p) => !p.hidden);
+  const PROJECT_TAGS = projectsContent.filters;
+  const initialCount = Math.max(1, Number(projectsContent.initialCount) || 4);
   const [activeTag, setActiveTag] = useState('All');
   const [activeProject, setActiveProject] = useState(null);
   const [showAll, setShowAll] = useState(false);
@@ -341,18 +347,20 @@ export default function Projects() {
       ? PROJECTS.filter((p) => p.category === 'resume')
       : activeTag === 'Vibe Code'
         ? PROJECTS.filter((p) => p.category === 'vibe')
-        : PROJECTS.filter((p) => p.tags.includes(activeTag));
+        : PROJECTS.filter((p) => (p.tags || []).includes(activeTag));
 
-  const visibleProjects = showAll ? filteredProjects : filteredProjects.slice(0, 4);
+  const visibleProjects = showAll ? filteredProjects : filteredProjects.slice(0, initialCount);
   const activeIndex = activeProject ? PROJECTS.findIndex((p) => p.id === activeProject.id) : -1;
+
+  if (!sec.visible) return null;
 
   return (
     <section id="projects" className="relative overflow-hidden py-24 md:py-36">
       <div className="container-section">
         <SectionHeading
-          eyebrow="Selected Work"
-          title="Projects with craft in every pixel"
-          lede="Technical depth, creative problem-solving and obsessive attention to detail."
+          eyebrow={sec.eyebrow}
+          title={sec.title}
+          lede={sec.lede}
         />
 
         {/* Filters */}
@@ -402,7 +410,7 @@ export default function Projects() {
         </div>
 
         {/* Show more */}
-        {filteredProjects.length > 4 && (
+        {filteredProjects.length > initialCount && (
           <div className="mt-20 text-center">
             <Magnetic strength={0.25}>
               <button

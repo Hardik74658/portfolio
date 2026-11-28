@@ -4,6 +4,7 @@ import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '../../context/ThemeContext';
 import Magnetic from '../ui/Magnetic';
 import { EASE } from '../ui/Reveal';
+import { useContent } from '../../context/ContentContext';
 
 const NAV_ITEMS = [
   { name: 'About', id: 'about' },
@@ -14,6 +15,10 @@ const NAV_ITEMS = [
 ];
 
 export default function Header() {
+  const { profile, sections: secs } = useContent();
+  const initials = `${profile.firstName?.[0] || ''}${profile.lastName?.[0] || ''}`.toUpperCase();
+  const sectionKey = { about: 'about', skills: 'skills', projects: 'projects', workexperience: 'experience', contact: 'contact' };
+  const navItems = NAV_ITEMS.filter(({ id }) => secs[sectionKey[id]]?.visible !== false);
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -74,17 +79,17 @@ export default function Header() {
             <Magnetic strength={0.25}>
               <a href="#" className="group flex items-center gap-2.5" aria-label="Back to top">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-ink-900 dark:bg-cream-50 font-display text-sm font-bold text-cream-50 dark:text-ink-900 transition-transform duration-300 group-hover:rotate-[-8deg]">
-                  HS
+                  {initials}
                 </span>
                 <span className="hidden sm:block font-display font-semibold text-ink-900 dark:text-ink-50">
-                  Hardik Songara
+                  {profile.firstName} {profile.lastName}
                 </span>
               </a>
             </Magnetic>
 
             {/* Desktop nav */}
             <ul className="hidden md:flex items-center gap-1">
-              {NAV_ITEMS.map((item) => (
+              {navItems.map((item) => (
                 <li key={item.id}>
                   <a
                     href={`#${item.id}`}
@@ -165,7 +170,7 @@ export default function Header() {
             transition={{ duration: 0.6, ease: [0.87, 0, 0.13, 1] }}
           >
             <ul className="space-y-2">
-              {NAV_ITEMS.map((item, i) => (
+              {navItems.map((item, i) => (
                 <li key={item.id} className="overflow-hidden">
                   <motion.a
                     href={`#${item.id}`}

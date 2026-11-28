@@ -3,13 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Magnetic from '../ui/Magnetic';
 import { EASE } from '../ui/Reveal';
-
-const LINKS = [
-  { name: 'GitHub', url: 'https://github.com/Hardik74658' },
-  { name: 'LinkedIn', url: 'https://linkedin.com/in/hardik21549' },
-  { name: 'Twitter', url: 'https://twitter.com/kano746581' },
-  { name: 'Instagram', url: 'https://instagram.com/hardik_21549' },
-];
+import { useContent } from '../../context/ContentContext';
 
 const NAV = [
   { name: 'About', href: '#about' },
@@ -21,6 +15,12 @@ const NAV = [
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { profile, socials, footer, sections } = useContent();
+  const LINKS = socials.filter((l) => l.url);
+  const nav = NAV.filter((n) => {
+    const key = { '#about': 'about', '#skills': 'skills', '#projects': 'projects', '#workexperience': 'experience', '#contact': 'contact' }[n.href];
+    return !key || sections[key]?.visible !== false;
+  });
 
   return (
     <footer className="relative overflow-hidden bg-ink-950 text-cream-50 noise">
@@ -33,7 +33,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: EASE }}
         >
-          What's next
+          {footer.eyebrow}
         </motion.p>
         <motion.h2
           className="text-display-sm mx-auto mt-4 max-w-3xl !text-cream-50 text-balance"
@@ -42,7 +42,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
         >
-          Have an idea? Let's make it move.
+          {footer.headline}
         </motion.h2>
         <motion.div
           className="mt-10"
@@ -53,10 +53,10 @@ export default function Footer() {
         >
           <Magnetic strength={0.25}>
             <a
-              href="mailto:hardik.songara.21549@gmail.com"
+              href={`mailto:${profile.email}`}
               className="group inline-flex items-center gap-3 rounded-full bg-accent-600 px-9 py-4 font-medium text-white shadow-glow transition-transform duration-300 hover:scale-[1.03] cursor-pointer"
             >
-              Say Hello
+              {footer.ctaLabel}
               <ArrowUpRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:rotate-45" />
             </a>
           </Magnetic>
@@ -68,7 +68,7 @@ export default function Footer() {
         <div className="flex w-max animate-marquee-slow">
           {Array.from({ length: 6 }).map((_, i) => (
             <span key={i} className="mx-8 font-display text-5xl md:text-7xl font-bold tracking-tight text-white/[0.07] whitespace-nowrap">
-              HARDIK SONGARA <span className="text-accent-500/30">·</span>
+              {footer.marqueeText} <span className="text-accent-500/30">·</span>
             </span>
           ))}
         </div>
@@ -76,11 +76,11 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="container-section flex flex-col items-center justify-between gap-6 py-10 md:flex-row">
-        <p className="text-sm text-ink-300">© {year} Hardik Songara. Crafted with care.</p>
+        <p className="text-sm text-ink-300">© {year} {footer.copyright}</p>
 
         <nav aria-label="Footer">
           <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <li key={item.name}>
                 <a href={item.href} className="text-sm text-ink-200 transition-colors hover:text-accent-400 cursor-pointer">
                   {item.name}

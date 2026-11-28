@@ -3,43 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import SectionHeading from '../ui/SectionHeading';
 import Reveal, { EASE, staggerParent, staggerChild } from '../ui/Reveal';
+import { useContent } from '../../context/ContentContext';
 
-const FAQS = [
-  {
-    question: 'Who am I as a developer?',
-    answer: "I'm an engineer who works across enterprise cloud and the modern web. By day I'm an SAP Cloud Technical Consultant at TCS; on the side I run TheMediaLabz, building scalable, user-centric web products with a keen eye for design and functionality.",
-  },
-  {
-    question: 'What technical skills do I bring?',
-    answer: 'On the enterprise side: SAP ERP tools (DED, CLD, SPC), SAP S/4HANA, SAP Web Dispatcher, SAP Cloud Connector agents, their installations, and Linux server administration. On the web side: React, Three.js / React Three Fiber, FastAPI, Firebase, MongoDB and Python, plus Excel and Power BI for data.',
-  },
-  {
-    question: "What's my professional experience?",
-    answer: "I'm currently at Tata Consultancy Services (TCS) as an Assistant System Engineer Trainee working as a Cloud Technical Consultant in SAP, and I became Team Lead within 3 months of joining. I also founded TheMediaLabz, a branding, content and web studio whose work includes Chai Kaapi Ahmedabad's ordering system and TheWedLabs. Before that, I worked as a Full Stack Developer Intern at Grownited Pvt. Ltd. (Jan–Apr 2025) where I built Founders Nexus — a platform connecting startup founders with mentors and investors — using FastAPI and modern frontend frameworks. I also worked as a Data Analyst Intern (June–July 2024) where I extracted data from PDFs, analyzed sales trends with Power BI, and employed statistical analysis using Python libraries.",
-  },
-  {
-    question: 'How do I lead?',
-    answer: "Becoming Team Lead at TCS within my first 3 months taught me that leadership is mostly clarity and trust: breaking work down, unblocking people early and owning the outcome. Running TheMediaLabz adds the other half: managing clients, deadlines and delivery end to end.",
-  },
-  {
-    question: 'How do I approach new challenges?',
-    answer: "As a quick learner and team player, I'm always eager to explore AI/ML and emerging technologies. I thrive in collaborative environments and adapt rapidly to new tools and frameworks.",
-  },
-  {
-    question: 'What drives me professionally?',
-    answer: "I'm driven by curiosity, empathy, and a desire to create real-world impact. I believe technology should solve genuine problems and enhance human experiences in meaningful ways.",
-  },
-  {
-    question: 'How do I demonstrate my abilities?',
-    answer: "My strong problem-solving skills shine through academic projects and hackathons. I've consistently delivered innovative solutions under pressure and transformed complex requirements into elegant implementations.",
-  },
-];
-
-const STATS = [
-  { value: '17+', label: 'Projects shipped' },
-  { value: '3 mo', label: 'To team lead' },
-  { value: '20+', label: 'Technologies' },
-];
+/** Renders *word* segments in the accent colour. */
+function Highlighted({ text = '' }) {
+  return text.split(/(\*[^*]+\*)/g).map((part, i) =>
+    part.startsWith('*') && part.endsWith('*') && part.length > 2
+      ? <span key={i} className="text-accent-600 dark:text-accent-400">{part.slice(1, -1)}</span>
+      : <React.Fragment key={i}>{part}</React.Fragment>
+  );
+}
 
 function FaqItem({ faq, index, open, onToggle }) {
   return (
@@ -92,14 +65,17 @@ function FaqItem({ faq, index, open, onToggle }) {
 
 export default function About() {
   const [openIndex, setOpenIndex] = useState(0);
+  const { sections, about } = useContent();
+  const sec = sections.about;
+  if (!sec.visible) return null;
 
   return (
     <section id="about" className="relative py-24 md:py-36 overflow-hidden">
       <div className="container-section">
         <SectionHeading
-          eyebrow="About Me"
-          title="Engineering with empathy, shipping with intent"
-          lede="A closer look at how I think, build and grow."
+          eyebrow={sec.eyebrow}
+          title={sec.title}
+          lede={sec.lede}
         />
 
         <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
@@ -109,12 +85,10 @@ export default function About() {
               <div className="surface relative overflow-hidden rounded-3xl p-8 noise">
                 <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent-500/10 blur-2xl" />
                 <p className="font-display text-xl sm:text-2xl font-medium leading-snug text-ink-800 dark:text-ink-50">
-                  “I believe the best software feels{' '}
-                  <span className="text-accent-600 dark:text-accent-400">invisible</span> — it just
-                  works, moves beautifully, and respects the person using it.”
+                  “<Highlighted text={about.quote} />”
                 </p>
                 <div className="mt-8 grid grid-cols-3 gap-4 border-t border-ink-900/[0.08] dark:border-white/[0.08] pt-6">
-                  {STATS.map((s, i) => (
+                  {about.stats.map((s, i) => (
                     <motion.div
                       key={s.label}
                       initial={{ opacity: 0, y: 16 }}
@@ -139,7 +113,7 @@ export default function About() {
             viewport={{ once: true, amount: 0.15 }}
             className="border-t border-ink-900/[0.08] dark:border-white/[0.08]"
           >
-            {FAQS.map((faq, i) => (
+            {about.faqs.map((faq, i) => (
               <FaqItem
                 key={i}
                 faq={faq}

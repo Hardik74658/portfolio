@@ -21,6 +21,8 @@ import FaJs from '../../assets/icons/skills/javascript.svg';
 import PowerBiIcon from '../../assets/icons/powerbi-icon-new.svg';
 import SectionHeading from '../ui/SectionHeading';
 import { EASE, staggerParent, staggerChild } from '../ui/Reveal';
+import { useContent } from '../../context/ContentContext';
+import { getIcon } from '../../data/icons';
 
 const skillIcons = {
   'Java': () => <img src={FaJava} alt="" className="h-5 w-5" />,
@@ -61,18 +63,6 @@ const skillIcons = {
 
 const getSkillIcon = (skill) => skillIcons[skill] || FaCode;
 
-const CATEGORIES = [
-  { title: 'SAP & Cloud', icon: CloudIcon, items: ['SAP S/4HANA', 'SAP ERP (DED, CLD, SPC)', 'SAP Web Dispatcher', 'SAP Cloud Connector', 'SAP Installations', 'Linux Server'], span: 'md:col-span-2' },
-  { title: 'Leadership', icon: UserGroupIcon, items: ['Team Leadership', 'People Management', 'Stakeholder Communication'] },
-  { title: 'Programming Languages', icon: CodeBracketIcon, items: ['Java', 'Python', 'HTML5', 'CSS3', 'JavaScript'], span: 'md:col-span-2' },
-  { title: 'Frameworks', icon: CpuChipIcon, items: ['Bootstrap', 'Flask', 'React', 'FastAPI', 'Three.js / R3F', 'Firebase'] },
-  { title: 'Data Visualization', icon: ChartBarIcon, items: ['Power BI', 'Excel'] },
-  { title: 'ML Libraries', icon: CubeIcon, items: ['NumPy', 'pandas', 'scikit-learn', 'Streamlit'] },
-  { title: 'Databases', icon: ServerStackIcon, items: ['MongoDB', 'MySQL'] },
-  { title: 'Product & Analytical Skills', icon: AcademicCapIcon, items: ['Strategy & Roadmapping', 'Agile & Scrum', 'User Research & UX Thinking', 'A/B Testing', 'SQL for Analytics', 'Data Storytelling'], span: 'md:col-span-2' },
-];
-
-const MARQUEE_SKILLS = ['SAP S/4HANA', 'SAP Cloud Connector', 'Linux Server', 'Team Leadership', 'React','Python', 'FastAPI', 'MongoDB', 'Power BI', 'JavaScript', 'pandas', 'MySQL', 'Flask', 'NumPy', 'Excel', 'Bootstrap'];
 
 /** Card with pointer-tracked 3D tilt (pointer devices only). */
 function TiltCard({ children, className = '' }) {
@@ -107,8 +97,9 @@ function TiltCard({ children, className = '' }) {
   );
 }
 
-function MarqueeRow() {
-  const items = [...MARQUEE_SKILLS, ...MARQUEE_SKILLS];
+function MarqueeRow({ skills }) {
+  if (!skills.length) return null;
+  const items = [...skills, ...skills];
   return (
     <div className="pause-hover relative mb-16 overflow-hidden py-2 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
       <div className="flex w-max animate-marquee gap-4">
@@ -130,17 +121,20 @@ function MarqueeRow() {
 }
 
 export default function Skills() {
+  const { sections, skills } = useContent();
+  const sec = sections.skills;
+  if (!sec.visible) return null;
   return (
     <section id="skills" className="relative py-24 md:py-36 overflow-hidden bg-cream-100/60 dark:bg-ink-900/40">
       <div className="container-section">
         <SectionHeading
-          eyebrow="Toolkit"
-          title="Skills that turn ideas into products"
-          lede="SAP cloud, full-stack engineering, data and leadership: one coherent toolkit."
+          eyebrow={sec.eyebrow}
+          title={sec.title}
+          lede={sec.lede}
         />
       </div>
 
-      <MarqueeRow />
+      <MarqueeRow skills={skills.marquee} />
 
       <div className="container-section">
         <motion.div
@@ -150,12 +144,14 @@ export default function Skills() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          {CATEGORIES.map((cat) => (
-            <motion.div key={cat.title} variants={staggerChild} className={cat.span || ''}>
+          {skills.categories.map((cat, ci) => {
+            const CatIcon = getIcon(cat.icon);
+            return (
+            <motion.div key={`${cat.title}-${ci}`} variants={staggerChild} className={cat.wide ? 'md:col-span-2' : ''}>
               <TiltCard className="surface group h-full rounded-3xl p-7 transition-shadow duration-500 hover:shadow-lift">
                 <div className="mb-6 flex items-center gap-3" style={{ transform: 'translateZ(24px)' }}>
                   <span className="grid h-11 w-11 place-items-center rounded-2xl bg-accent-500/10 text-accent-600 dark:text-accent-400 transition-transform duration-500 ease-out-expo group-hover:rotate-[-8deg] group-hover:scale-110">
-                    <cat.icon className="h-5 w-5" />
+                    <CatIcon className="h-5 w-5" />
                   </span>
                   <h3 className="font-display text-lg font-semibold">{cat.title}</h3>
                 </div>
@@ -178,7 +174,8 @@ export default function Skills() {
                 </ul>
               </TiltCard>
             </motion.div>
-          ))}
+          );
+          })}
         </motion.div>
       </div>
     </section>

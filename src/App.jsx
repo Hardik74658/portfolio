@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import SmoothScroll from './components/SmoothScroll';
@@ -14,7 +15,26 @@ import ScrollToTop from './components/ui/ScrollToTop';
 import Loader from './components/ui/Loader';
 import './App.css';
 
+// Admin editor: only loaded on its unlisted route, so visitors never download it.
+const AdminPage = lazy(() => import('./admin/AdminPage'));
+
 function App() {
+  return (
+    <Routes>
+      <Route
+        path="/k3th"
+        element={
+          <Suspense fallback={<div className="min-h-screen bg-white" />}>
+            <AdminPage />
+          </Suspense>
+        }
+      />
+      <Route path="*" element={<Site />} />
+    </Routes>
+  );
+}
+
+function Site() {
   const [loading, setLoading] = useState(true);
 
   return (
